@@ -40,7 +40,7 @@ Thanks and Inspirations
 * https://github.com/Swader/ChromeSkel_a
 * ScraperWiki (https://scraperwiki.com/) :)
 
-License
+Licence
 -------
 Copyright (c) 2012 Aidan Hobson Sayers.
 Available under the MIT (Expat) Licence.
