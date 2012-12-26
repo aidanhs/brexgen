@@ -43,4 +43,4 @@ Thanks and Inspirations
 License
 -------
 Copyright (c) 2012 Aidan Hobson Sayers.
-Available under the Modified BSD Licence.
+Available under the MIT (Expat) Licence.
