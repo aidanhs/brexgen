@@ -44,3 +44,6 @@ Licence
 -------
 Copyright (c) 2012 Aidan Hobson Sayers.
 Available under the MIT (Expat) Licence.
+
+* async.js and jQuery are under the MIT (Expat) Licence.
+* zip.js is under the New BSD Licence.
