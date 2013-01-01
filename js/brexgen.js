@@ -1,6 +1,23 @@
 
 zip.workerScriptsPath = "js/lib/zip/";
 
+function pubFromPriv(rsakey) {
+  var pubBytes = forge.asn1.toDer(forge.pki.publicKeyToAsn1(rsakey)).getBytes();
+  return forge.util.bytesToHex(pubBytes);
+}
+
+function hexToBuf(hexstr) {
+  if (hexstr % 2 == 1) { hexstr = '0' + hexstr; }
+  var l = hexstr.length / 2;
+  var buf = new ArrayBuffer(l);
+  var byteArr = new Uint8Array(buf);
+  for (var i = 0, h; i < l; i++) {
+    h = hexstr.slice(i*2, (i*2)+2);
+    byteArr[i] = parseInt(h, 16);
+  }
+  return buf;
+}
+
 function getBlob(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
