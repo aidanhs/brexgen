@@ -46,4 +46,7 @@ Copyright (c) 2012 Aidan Hobson Sayers.
 Available under the MIT (Expat) Licence.
 
 * async.js and jQuery are under the MIT (Expat) Licence.
-* zip.js is under the New BSD Licence.
+* zip.js and Forge are under the New (3-clause) BSD Licence.
+* The jsbn library (included in Forge) appears to be under a slightly modified MIT-style licence, although the author states it is 'a BSD licence' - it is possible that the sum legal effect of the modification is indeed one of the three variations of BSD licence.
+
+This is a mess. If you for some reason like brexgen enough to want to fork it under another licence, get in touch - I am very much in favour of reducing the number of licences that need to be included in a project.
