@@ -19,12 +19,21 @@ function getBlob(url, callback) {
   xhr.send();
 }
 
+/*
+ * This turns a web directory of files into a zip.
+ * It requires
+ * - gitJSON, obtained with the /trees/?recursive=1 github api call
+ * - baseUrl, a web folder with contents mapping exactly to those in gitJSON
+ *   e.g. "http://www.example.org/a/b/repocontents/"
+ * - relPath, a path relative to baseUrl (i.e. a subdirectory of the git repo)
+ *   where the extension files may be found.
+ *   e.g. "/" (the git repo is a chrome extension), "ext/chrome/"
+ */
 function zipWebDir(baseURL, relPath, gitJSON, callback) {
   // strip trailing slash from url, trailing and leading from path
-  // Where the git submodule is located
   baseUrl = baseURL.replace(/\/$/, "");
-  // The relative path in the git submodule
   relPath = relPath.replace(/^\/|\/$/g, "");
+  // The url to turn into a zip
   var extUrl = baseUrl + "/" + relPath;
 
   var zipFs = new zip.fs.FS();
@@ -47,7 +56,7 @@ function zipWebDir(baseURL, relPath, gitJSON, callback) {
           return callback();
       }
     },
-    function (err) { console.log("done"); z = zipFs; }
+    function (err) { callback(err, zipFs); }
   );
 }
 
