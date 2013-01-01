@@ -37,6 +37,46 @@ function hexToBuf(hexstr) {
   return buf;
 }
 
+// Given a zip (blob), turn it into a crx (blob).
+function zipToCrx(zip, callback) {
+  var err = null;
+
+  var fr = new FileReader();
+  fr.onload = function () {
+    // Necessary details for variable length section of the header
+    var rsa = forge.pki.privateKeyFromPem(pemstring);
+    var zipSha = forge.md.sha1.create();
+    zipSha.update(fr.result);
+    var sig = new Blob([hexToBuf(forge.util.bytesToHex(rsa.sign(zipSha)))]);
+    var pubkey = new Blob([hexToBuf(pubFromPriv(rsa))]);
+
+    var header = new ArrayBuffer(16);
+    var headerView = new DataView(header);
+
+    // Construct the fixed length section of the header
+    // Magic number
+    headerView.setUint8(0, 0x43);
+    headerView.setUint8(1, 0x72);
+    headerView.setUint8(2, 0x32);
+    headerView.setUint8(3, 0x34);
+    // Format version number
+    headerView.setUint32(4, 2, true);
+    // Length of public key
+    headerView.setUint32(8, pubkey.size, true);
+    // Length of signature
+    headerView.setUint32(12, sig.size, true);
+
+    // Put it all together
+    var crx = new Blob(
+      [header, pubkey, sig, zip],
+      { type: "application/x-chrome-extension" }
+    );
+
+    callback(err, crx);
+  };
+  fr.readAsBinaryString(zip);
+}
+
 function getBlob(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
