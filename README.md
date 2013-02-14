@@ -21,8 +21,8 @@ changing binaries in git anyway.
 Why?
 -----
 I was (am) unwilling to pay for the permission to improve Google's platform on
-Chrome, so started thinking about alternative ways to distribute Chrome
-extensions.
+Chrome (although it isn't as bad as I thought when I created this), so started
+thinking about alternative ways to distribute Chrome extensions.
 In addition, distributing alpha releases seems like it must be painful without
 one's own server.
 
