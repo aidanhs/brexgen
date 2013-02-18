@@ -160,3 +160,22 @@ function zipAddBlob (zipDir, path, extUrl, callback) {
     callback(err);
   });
 }
+
+/*
+ * Copy all the contents of zipDir1 into zipDir2.
+ * No protection against infinite recursion.
+ * callback should be 'function (err) { ... }'
+ */
+function copyZipDir (srcZipDir, targetZipDir, callback) {
+  async.forEach(srcZipDir.children, function (item, cb) {
+    if (item.directory) {
+      newDir = targetZipDir.addDirectory(item.name);
+      copyZipDir(item, newDir, cb);
+    } else {
+      item.getBlob("", function (blob) {
+        targetZipDir.addBlob(item.name, blob);
+        cb();
+      });
+    }
+  }, callback);
+}
