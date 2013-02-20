@@ -162,7 +162,37 @@ function zipAddBlob (zipDir, path, extUrl, callback) {
 }
 
 /*
- * Creates a zip file from the contents of path in the zip file provided.
+ * Given zip url and a path, anything under that path is put in a new zip FS.
+ * The path is treated like a linux directory, i.e. the root at '/'.
+ */
+function getZipUrl(url, path, callback){
+  var zipFs = new zip.fs.FS();
+
+  zipFs.importHttpContent(url, false,
+    function() {
+      if (path === '' || path === '/') { return callback(undefined, blob); }
+      getSubZip(zipFs, path, function (err, targetFs) {
+        if (err) { return callback(err); }
+        // Do something with the new zip
+        targetFs.exportBlob(
+          function (blob) {
+            callback(undefined, blob);
+          },
+          function (progress, max) { },
+          function (err) {
+            callback(err || new Error("Unable to export blob"));
+          }
+        );
+      });
+    },
+    function (err) {
+      callback(err || new Error("Unable to import from HTTP"));
+    }
+  );
+}
+
+/*
+ * Creates a new zip file from the contents of path in the zip file provided.
  * callback should be 'function (err, newZipFs) { ... }'
  */
 function getSubZip(zipFs, path, callback) {
