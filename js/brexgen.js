@@ -165,7 +165,7 @@ function zipAddBlob (zipDir, path, extUrl, callback) {
  * Creates a zip file from the contents of path in the zip file provided.
  * callback should be 'function (err, newZipFs) { ... }'
  */
-function subZipFs(zipFs, path, callback) {
+function getSubZip(zipFs, path, callback) {
   var targetFs = new zip.fs.FS();
   path = path.replace(/^\/*|\/*$/g, '');
   var srcDir;
@@ -184,7 +184,7 @@ function subZipFs(zipFs, path, callback) {
  * No protection against infinite recursion.
  * callback should be 'function (err) { ... }'
  */
-function copyZipDir (srcZipDir, targetZipDir, callback) {
+function copyZipDir(srcZipDir, targetZipDir, callback) {
   async.forEach(srcZipDir.children, function (item, cb) {
     if (item.directory) {
       newDir = targetZipDir.addDirectory(item.name);
