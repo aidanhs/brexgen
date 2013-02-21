@@ -161,6 +161,25 @@ function zipAddBlob (zipDir, path, extUrl, callback) {
   });
 }
 
+// TODO: look up the format of the submodules file
+function parseSubModules (gitModules, gitJSON) {
+  var subModules = {};
+  // Split based on the 'title' lines for each submodule
+  gitModules.split(/^\[.*?\]$/).slice(1).forEach(function (gitMod) {
+    var mod = {
+      url:  gitMod.match("url = (.*?$)")[1],
+      path: gitMod.match("path = (.*?$)")[1]
+    };
+    subModules[mod.path] = mod;
+  });
+  gitJSON.tree.forEach(function (file) {
+    if (file.type === "commit") {
+      subModules[file.path].sha = file.sha;
+    }
+  });
+  return subModules;
+}
+
 /*
  * Given zip url and a path, anything under that path is put in a new zip FS.
  * The path is treated like a linux directory, i.e. the root at '/'.
