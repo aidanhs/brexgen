@@ -36,4 +36,46 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
 </script>-->
+
+<script>
+  window.URL = window.URL || window.webkitURL || window.mozURL;
+  path = "/brexgen/eg_chrome/";
+
+  jQuery.getJSON("/ChromeSkel_a.json", function (data) {
+    zipWebDir(
+      "http://127.0.0.1:8000/eg_chrome/",
+      "",
+      data,
+      function (err, zipFs) {
+        console.log("Made zip fs");
+        zipFs.exportBlob(function (zip) {
+          z = zip;
+          document.getElementById("downloadzip").href =
+            window.URL.createObjectURL(zip);
+          console.log("Exported blob");
+          zipToCrx(zip, function (err, crx) {
+
+            crxUrl = window.URL.createObjectURL(crx);
+
+            dl = document.getElementById("download");
+            dl.href = crxUrl;
+            dl.download = "extension.crx";
+
+            console.log("Added link");
+            //reader = new FileReader();
+            //reader.onload = function () {
+            //  console.log("Made crx");
+            //  dl = document.getElementById("download");
+            //  dl.href = reader.result;
+            //  dl.download = "extension.crx";
+            //}
+            //reader.readAsDataURL(crx);
+
+          });
+        });
+      }
+    );
+  });
+</script>
+
 </html>
